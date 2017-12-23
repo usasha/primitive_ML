@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class TreeNode(object):
     def __init__(self, feature, threshold):
         self.feature = feature
@@ -11,6 +14,26 @@ class DecisionTree(object):
     def __init__(self):
         self.root = TreeNode(None, None)
         pass
+
+    def _inf_criteria(self, y):
+        if len(y):
+            return np.dot((y - y.mean()), (y - y.mean())) / len(y)
+        else:
+            return 0
+
+    def split(self, x, y):
+        errors = {}
+        for feature in range(len(x) + 1):
+            for threshold in np.unique(x[:, feature]):
+                left = x[:, feature] < threshold
+                inf_left = self._inf_criteria(y[left])
+                inf_right = self._inf_criteria(y[~left])
+                err = (len(y[left]) / len(y) * inf_left
+                       + len(y[~left]) / len(y) * inf_right)
+                errors[err] = {'feature': feature, 'threshold': threshold}
+
+        best_split = min(errors.keys())
+        return best_split
 
     def fit(self, x, y):
         self.root = TreeNode(1, 0.5)
