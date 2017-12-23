@@ -5,6 +5,9 @@ class LinearRegression(object):
         self.weights = []
         self.learn_rate = learn_rate
 
+    def _compute_gradient(self, X, Y):
+        return 2 * (X.T.dot(X.dot(self.weights) - Y)) / len(Y)
+
     def fit(self, X, Y):
         intercept = np.ones((len(X), 1))
         X = np.append(intercept, X, 1)
@@ -13,10 +16,8 @@ class LinearRegression(object):
         grad = np.ones((len(X.T),1))
 
         while np.linalg.norm(grad) > 0.001:
-        # for i in range(10000):
-            grad = 2 * (X.T.dot(X.dot(self.weights) - Y)) / len(Y)
+            grad = self._compute_gradient(X, Y)
             self.weights -= grad * self.learn_rate
-            # self.learn_rate *= 0.9
 
     def predict(self, X):
         intercept = np.ones((len(X),1))
