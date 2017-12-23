@@ -2,9 +2,9 @@ import numpy as np
 
 
 class TreeNode(object):
-    def __init__(self, feature, threshold):
-        self.feature = feature
-        self.threshold = threshold
+    def __init__(self):
+        self.feature = None
+        self.threshold = None
         self.predict = None
         self.left = None
         self.right = None
@@ -12,7 +12,7 @@ class TreeNode(object):
 
 class DecisionTree(object):
     def __init__(self):
-        self.root = TreeNode(None, None)
+        self.root = TreeNode()
         pass
 
     def _inf_criteria(self, y):
@@ -21,9 +21,13 @@ class DecisionTree(object):
         else:
             return 0
 
-    def split(self, x, y):
+    def split(self, x, y, node):
+        if len(np.unique(y)) == 1:
+            node.predict = np.mean(y)
+            return
+
         errors = {}
-        for feature in range(len(x) + 1):
+        for feature in range(len(x.T)):
             for threshold in np.unique(x[:, feature]):
                 left = x[:, feature] < threshold
                 inf_left = self._inf_criteria(y[left])
@@ -32,20 +36,23 @@ class DecisionTree(object):
                        + len(y[~left]) / len(y) * inf_right)
                 errors[err] = {'feature': feature, 'threshold': threshold}
 
-        best_split = min(errors.keys())
-        return best_split
+        best_split = errors[min(errors.keys())]
+        left = x[:, best_split['feature']] < best_split['threshold']
+        right = x[:, best_split['feature']] >= best_split['threshold']
+
+        node.feature = best_split['feature']
+        node.threshold = best_split['threshold']
+        node.left = TreeNode()
+        self.split(x[left], y[left], node.left)
+        node.right = TreeNode()
+        self.split(x[right], y[right], node.right)
 
     def fit(self, x, y):
-        self.root = TreeNode(1, 0.5)
-        self.root.left = TreeNode(None, None)
-        self.root.left.predict = 111
-        self.root.right = TreeNode(None, None)
-        self.root.right.predict = 777
+        self.split(x, y, self.root)
 
     def predict(self, x):
         result = []
         for point in x:
-            print('>', point)
             tree = self.root
             while not tree.predict:
                 if point[tree.feature] < tree.threshold:
