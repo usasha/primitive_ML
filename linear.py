@@ -1,12 +1,13 @@
 import numpy as np
 
+
 class LinearRegression(object):
     def __init__(self, learn_rate):
         self.weights = []
         self.learn_rate = learn_rate
 
     def _compute_gradient(self, X, Y):
-        return 2 * (X.T.dot(X.dot(self.weights) - Y)) / len(Y)
+        return (X.T.dot(X.dot(self.weights) - Y)) * 2 / len(Y)
 
     def fit(self, X, Y):
         intercept = np.ones((len(X), 1))
