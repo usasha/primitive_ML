@@ -1,9 +1,4 @@
 import numpy as np
-from sklearn import datasets
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error
-from sklearn.linear_model import LinearRegression as LR
-
 
 class LinearRegression(object):
     def __init__(self, learn_rate):
@@ -28,24 +23,3 @@ class LinearRegression(object):
         X = np.append(intercept, X, 1)
 
         return X.dot(self.weights)
-
-
-# dataset = datasets.load_boston()
-dataset = datasets.load_diabetes()
-scaler = StandardScaler()
-data = scaler.fit_transform(dataset.data)
-target = dataset.target
-
-lr = LinearRegression(0.01)
-lr.fit(data[:-100], target[:-100])
-result = lr.predict(data[-100:])
-
-
-scores = mean_squared_error(target[-100:], result[-100:])
-print(scores)
-print("----------------")
-lr2 = LR()
-lr2.fit(data[:-100], target[:-100])
-result = lr2.predict(data[-100:])
-scores = mean_squared_error(target[-100:], result[-100:])
-print(scores)
