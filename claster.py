@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.stats import mode
 
+
 class KMeans(object):
     def __init__(self, n_clusters):
         self.n_clusters = n_clusters
@@ -39,7 +40,7 @@ class KMeans(object):
         return result
 
 
-class KNN_clf(object):
+class KNNClf(object):
     def __init__(self, n_neighbors):
         self.n_neighbors = n_neighbors
         self.x = None
@@ -58,5 +59,15 @@ class KNN_clf(object):
         for point in x:
             neighbors = self._get_neighbors(point)
             result.append(int(mode(self.y[neighbors])[0]))
+
+        return result
+
+
+class KNNReg(KNNClf):
+    def predict(self, x):
+        result = []
+        for point in x:
+            neighbors = self._get_neighbors(point)
+            result.append(np.mean(self.y[neighbors]))
 
         return result
