@@ -18,7 +18,6 @@ class KMeans(object):
                 # find distances to all cluster centers
                 distances = np.linalg.norm(self.centers - x[point, :], axis=1)
                 # add point to neartest cluster
-                print(type(np.argmin(distances)))
                 self.clusters[np.argmin(distances)].append(point)
 
             self.centers = []
@@ -31,4 +30,10 @@ class KMeans(object):
                 self.centers.append(center)
 
     def predict(self, x):
-        pass
+        x = np.array(x)
+        result = []
+        for point in range(len(x)):
+            distances = np.linalg.norm(self.centers - x[point, :], axis=1)
+            result.append(np.argmin(distances))
+
+        return result
