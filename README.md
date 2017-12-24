@@ -1,5 +1,5 @@
 # primitive_ML
-basic implementation of machine learning algorithms, 
+Basic implementation of machine learning algorithms, 
 Main goal is to implement basic but usable machine learning stack of algirithms and helper functions.
 I will keep it simple with minimum options and lines of code.
 
