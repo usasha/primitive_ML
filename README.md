@@ -11,3 +11,8 @@ I will keep it simple with minimum options and lines of code.
 - descision tree
 - random forest
 - gradient tree boosting
+
+### Clusterisation:
+- k means
+- k nearest neighbors classifier
+- k nearest neighbors regression
