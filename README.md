@@ -10,3 +10,4 @@ I will keep it simple with minimum options and lines of code.
 ### Tree based models:
 - descision tree
 - random forest
+- gradient tree boosting
