@@ -38,7 +38,7 @@ class DecisionTree(object):
 
         best_split = errors[min(errors.keys())]
         left = x[:, best_split['feature']] < best_split['threshold']
-        right = x[:, best_split['feature']] >= best_split['threshold']
+        right = ~left
 
         node.feature = best_split['feature']
         node.threshold = best_split['threshold']
