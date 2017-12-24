@@ -61,3 +61,24 @@ class DecisionTree(object):
                     tree = tree.right
             result.append(tree.predict)
         return result
+
+
+class RandomForest(object):
+    def __init__(self, n_estimators):
+        self.n_estimators = n_estimators
+        self.trees = []
+        pass
+
+    def fit(self, x, y):
+        for i in range(self.n_estimators):
+            sub = np.random.randint(0, len(x), len(x))
+
+            new_tree = DecisionTree()
+            new_tree.fit(x[[sub]], y[[sub]])
+            self.trees.append(new_tree)
+
+    def predict(self, x):
+        answers = []
+        for tree in self.trees:
+            answers.append(np.array(tree.predict(x)))
+        return sum(answers) / len(answers)
