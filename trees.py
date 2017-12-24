@@ -93,7 +93,7 @@ class RandomForest(object):
 
 
 class GradientBoosting(object):
-    def __init__(self, n_estimators, max_depth=5, learning_rate=0.1):
+    def __init__(self, learning_rate=0.1, n_estimators=20, max_depth=5):
         self.n_estimators = n_estimators
         self.max_depth = max_depth
         self.learning_rate = learning_rate
