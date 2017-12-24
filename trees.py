@@ -59,11 +59,14 @@ class DecisionTree(object):
         result = []
         for point in x:
             tree = self.root
-            while not tree.predict:
-                if point[tree.feature] < tree.threshold:
-                    tree = tree.left
-                else:
-                    tree = tree.right
+            while tree.predict is None:
+                try:
+                    if point[tree.feature] < tree.threshold:
+                        tree = tree.left
+                    else:
+                        tree = tree.right
+                except TypeError:
+                    pass
             result.append(tree.predict)
         return result
 
@@ -87,3 +90,24 @@ class RandomForest(object):
         for tree in self.trees:
             answers.append(np.array(tree.predict(x)))
         return sum(answers) / len(answers)
+
+
+class GradientBoosting(object):
+    def __init__(self, n_estimators, max_depth=5):
+        self.n_estimators = n_estimators
+        self.max_depth = max_depth
+        self.trees = []
+
+    def fit(self, x, y):
+        error = y
+        for i in range(self.n_estimators):
+            tree = DecisionTree(self.max_depth)
+            tree.fit(x, error)
+            self.trees.append(tree)
+            error -= tree.predict(x)
+
+    def predict(self, x):
+        answer = np.zeros(len(x))
+        for tree in self.trees:
+            answer += tree.predict(x)
+        return answer
