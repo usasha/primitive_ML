@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.stats import mode
 
 
 class KMeans(object):
@@ -35,5 +36,38 @@ class KMeans(object):
         for point in range(len(x)):
             distances = np.linalg.norm(self.centers - x[point, :], axis=1)
             result.append(np.argmin(distances))
+
+        return result
+
+
+class KNNClf(object):
+    def __init__(self, n_neighbors):
+        self.n_neighbors = n_neighbors
+        self.x = None
+        self.y = None
+
+    def fit(self, x, y):
+        self.x = np.array(x)
+        self.y = np.array(y)
+
+    def _get_neighbors(self, point):
+        distances = np.linalg.norm(self.x - point, axis=1)
+        return np.argsort(distances)[:self.n_neighbors]
+
+    def predict(self, x):
+        result = []
+        for point in x:
+            neighbors = self._get_neighbors(point)
+            result.append(int(mode(self.y[neighbors])[0]))
+
+        return result
+
+
+class KNNReg(KNNClf):
+    def predict(self, x):
+        result = []
+        for point in x:
+            neighbors = self._get_neighbors(point)
+            result.append(np.mean(self.y[neighbors]))
 
         return result
