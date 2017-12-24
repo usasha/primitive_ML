@@ -68,7 +68,7 @@ class DecisionTree(object):
                 except TypeError:
                     pass
             result.append(tree.predict)
-        return result
+        return np.array(result)
 
 
 class RandomForest(object):
@@ -93,9 +93,10 @@ class RandomForest(object):
 
 
 class GradientBoosting(object):
-    def __init__(self, n_estimators, max_depth=5):
+    def __init__(self, n_estimators, max_depth=5, learning_rate=0.1):
         self.n_estimators = n_estimators
         self.max_depth = max_depth
+        self.learning_rate = learning_rate
         self.trees = []
 
     def fit(self, x, y):
@@ -104,10 +105,10 @@ class GradientBoosting(object):
             tree = DecisionTree(self.max_depth)
             tree.fit(x, error)
             self.trees.append(tree)
-            error -= tree.predict(x)
+            error -= tree.predict(x) * self.learning_rate
 
     def predict(self, x):
         answer = np.zeros(len(x))
         for tree in self.trees:
-            answer += tree.predict(x)
+            answer += tree.predict(x) * self.learning_rate
         return answer
