@@ -7,7 +7,7 @@ I will keep it simple with minimum options and lines of code.
 - Ridge (L2 regulirized) regression
 
 ### Tree based models:
-- descision tree
+- decision tree
 - random forest
 - gradient tree boosting
 
