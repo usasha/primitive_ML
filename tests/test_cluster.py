@@ -6,6 +6,7 @@ from pathlib import Path
 sys.path.append(str(Path('.').absolute().parent))
 
 from cluster import KMeans
+from cluster import KNNClf
 
 
 def test_kmeans_init():
@@ -56,3 +57,47 @@ def test_kmean_predict():
             dist_external = min(np.linalg.norm(clf.centers[(cluster+1) % 3] - point),
                                 np.linalg.norm(clf.centers[(cluster+2) % 3] - point))
             assert dist_internal <= dist_external
+
+
+def test_knn_clf_init():
+    clf = KNNClf(3)
+    assert clf.n_neighbors == 3
+    assert clf.x is None
+    assert clf.y is None
+
+
+def test_knn_clf_fit():
+    dataset = datasets.load_iris()
+    scaler = StandardScaler()
+    x = scaler.fit_transform(dataset.data)
+    y = dataset.target
+    clf = KNNClf(3)
+    clf.fit(x, y)
+    assert np.array_equiv(clf.x, x)
+    assert np.array_equiv(clf.y, y)
+    assert clf.n_neighbors == 3
+
+
+def test_knn_clf_get_neighbors():
+    np.random.seed(42)
+    dataset = datasets.load_iris()
+    scaler = StandardScaler()
+    x = scaler.fit_transform(dataset.data)
+    y = dataset.target
+    clf = KNNClf(3)
+    clf.fit(x, y)
+    points = x[np.random.choice(x.shape[0], 20, replace=False)]
+    for point in points:
+        neighbors = clf._get_neighbors(point)
+        assert len(neighbors) == clf.n_neighbors
+        dist_neighbors = max(np.linalg.norm(x[neighbors] - point, axis=1))
+        for other in x[np.random.choice(x.shape[0], 20, replace=False)]:
+            if other not in x[neighbors]:
+                dist_other = np.linalg.norm(other - point)
+                assert dist_neighbors <= dist_other
+
+#
+# def test_KNN_predict(): clf = KNN(3)
+#     clf.fit(x, y)
+#     y_pred = clf.predict(x)
+#     assert y_pred == clf.y
