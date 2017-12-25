@@ -96,8 +96,13 @@ def test_knn_clf_get_neighbors():
                 dist_other = np.linalg.norm(other - point)
                 assert dist_neighbors <= dist_other
 
-#
-# def test_KNN_predict(): clf = KNN(3)
-#     clf.fit(x, y)
-#     y_pred = clf.predict(x)
-#     assert y_pred == clf.y
+
+def test_knn_clf_predict():
+    dataset = datasets.load_iris()
+    scaler = StandardScaler()
+    x = scaler.fit_transform(dataset.data)
+    y = dataset.target
+    clf = KNNClf(3)
+    clf.fit(x, y)
+    y_pred = clf.predict(x)
+    assert set(y_pred) == set(clf.y)
