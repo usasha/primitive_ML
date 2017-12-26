@@ -1,6 +1,6 @@
 # primitive_ML
 Main goal is to implement basic but usable machine learning stack of algirithms and helper functions.
-I will keep it simple with minimum options and lines of code.
+I will keep it simple with minimum options and lines of code. I use MSE loss function in most cases.
 
 ### Linear models:
 - linear regression without regularization
