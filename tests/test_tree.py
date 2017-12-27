@@ -1,6 +1,7 @@
 import pytest
 import numpy as np
 import sys
+from sklearn import datasets
 from pathlib import Path
 sys.path.append(str(Path('.').absolute().parent))
 
@@ -52,3 +53,32 @@ def test_decision_tree_split():
     assert tree.root.right.max_depth == 2
     assert tree.root.feature == 1
     assert tree.root.threshold == 3
+
+
+def test_decision_tree_fit():
+    tree = DecisionTree(3)
+    x = np.array([[1,2],[2,3],[4,5]])
+    y = np.array([0,1,1])
+    tree.fit(x, y)
+    assert tree.root.left.predict == 0
+    assert tree.root.right.predict == 1
+    assert tree.root.left.left is None
+    assert tree.root.left.right is None
+    assert tree.root.right.left is None
+    assert tree.root.right.right is None
+    assert tree.root.max_depth == 3
+    assert tree.root.left.max_depth == 2
+    assert tree.root.right.max_depth == 2
+    assert tree.root.feature == 1
+    assert tree.root.threshold == 3
+
+
+def test_decidion_tree_predict():
+    dataset = datasets.load_iris()
+    x = dataset.data
+    y = dataset.target
+    clf = DecisionTree()
+    clf.fit(x, y)
+    y_pred = clf.predict(x)
+    assert np.array_equal(y, y_pred)
+
