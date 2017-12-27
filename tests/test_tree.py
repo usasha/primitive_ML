@@ -7,6 +7,7 @@ sys.path.append(str(Path('.').absolute().parent))
 
 from trees import TreeNode
 from trees import DecisionTree
+from trees import RandomForest
 
 
 def test_tree_node_init():
@@ -81,4 +82,24 @@ def test_decidion_tree_predict():
     clf.fit(x, y)
     y_pred = clf.predict(x)
     assert np.array_equal(y, y_pred)
+
+
+def test_rf_init():
+    clf = RandomForest(10, 40)
+    assert clf.n_estimators == 10
+    assert clf.trees == []
+    assert clf.max_depth == 40
+
+
+def test_rf_fit():
+    clf = RandomForest(10, 40)
+    dataset = datasets.load_iris()
+    x = dataset.data
+    y = dataset.target
+    clf.fit(x, y)
+    assert len(clf.trees) == 10
+    for tree in clf.trees:
+        assert type(tree) == DecisionTree
+        assert tree.root.max_depth == 40
+
 
