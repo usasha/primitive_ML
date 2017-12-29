@@ -8,6 +8,7 @@ sys.path.append(str(Path('.').absolute().parent))
 from trees import TreeNode
 from trees import DecisionTree
 from trees import RandomForest
+from trees import GradientBoosting
 
 
 def test_tree_node_init():
@@ -103,3 +104,20 @@ def test_rf_fit():
         assert tree.root.max_depth == 40
 
 
+def test_rf_predict():
+    clf = RandomForest(10, 40)
+    dataset = datasets.load_iris()
+    x = dataset.data
+    y = dataset.target
+    clf.fit(x, y)
+    assert len(clf.predict(x)) == len(x)
+    y_pred = clf.predict(x)
+    assert np.sum(np.abs(np.mean(y_pred) - np.mean(y))) < 0.01
+
+
+def test_gradient_boosting_init():
+    clf = GradientBoosting(learning_rate=0.1, n_estimators=20, max_depth=5)
+    assert clf.learning_rate == 0.1
+    assert clf.n_estimators == 20
+    assert clf.max_depth == 5
+    assert clf.trees == []
