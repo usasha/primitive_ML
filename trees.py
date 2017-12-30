@@ -14,7 +14,6 @@ class TreeNode(object):
 class DecisionTree(object):
     def __init__(self, max_depth=None):
         self.root = TreeNode(max_depth)
-        pass
 
     def _inf_criteria(self, y):
         if len(y):
@@ -100,7 +99,8 @@ class GradientBoosting(object):
         self.trees = []
 
     def fit(self, x, y):
-        error = y
+        error = np.asarray(y, dtype=float)
+
         for i in range(self.n_estimators):
             tree = DecisionTree(self.max_depth)
             tree.fit(x, error)

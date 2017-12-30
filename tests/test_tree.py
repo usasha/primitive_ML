@@ -121,3 +121,37 @@ def test_gradient_boosting_init():
     assert clf.n_estimators == 20
     assert clf.max_depth == 5
     assert clf.trees == []
+
+
+def test_gradient_boosting_fit():
+    clf = GradientBoosting(learning_rate=0.1, n_estimators=20, max_depth=5)
+    dataset = datasets.load_iris()
+    x = dataset.data
+    y = dataset.target
+    clf.fit(x, y)
+    assert len(clf.trees) == clf.n_estimators
+    for tree in clf.trees:
+        assert type(tree) == DecisionTree
+
+
+def test_gradient_boosting_predict():
+    clf = GradientBoosting(learning_rate=0.1, n_estimators=20, max_depth=5)
+    dataset = datasets.load_iris()
+    x = dataset.data
+    y = dataset.target
+    clf.fit(x, y)
+    assert len(clf.predict(x)) == len(y)
+    assert clf.learning_rate == 0.1
+    assert clf.n_estimators == 20
+    assert clf.max_depth == 5
+    assert len(clf.trees) == clf.n_estimators
+
+    clf = GradientBoosting(learning_rate=0.1, n_estimators=1, max_depth=5000)
+    dataset = datasets.load_iris()
+    x = dataset.data
+    y = dataset.target
+    pred_gb = clf.fit(x, y)
+
+    tree = DecisionTree()
+    pred_t = tree.fit(x, y)
+    assert np.array_equal(pred_gb, pred_t)
