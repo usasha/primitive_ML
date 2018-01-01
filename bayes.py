@@ -35,9 +35,8 @@ class NaiveBayesMultinominal(NaiveBayesBase):
         p_a = (self.y == category).sum() / len(self.y)
         p_ba = ((self.x[self.y == category][:, feature] == point[feature]).sum()
                 / len(self.x[self.y == category]))
-        p_b = (self.x[:, feature] == point[feature]).sum() / len(self.x) + 1e-100
 
-        return p_a * p_ba / p_b
+        return p_a * p_ba
 
 
 class NaiveBayesGaussian(NaiveBayesBase):
