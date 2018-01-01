@@ -44,5 +44,4 @@ class NaiveBayesGaussian(NaiveBayesBase):
         u = np.mean(self.x[self.y == category])
         prob = (1 / np.sqrt(2 * np.pi * std ** 2)
                 * np.exp(-(point[feature] - u) ** 2 / 2 * std ** 2))
-
         return prob
