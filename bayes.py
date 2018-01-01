@@ -25,9 +25,28 @@ class NaiveBayes(object):
             for category in np.unique(self.y):
                 category_prob = 1
                 for feature in range(len(point)):
-                    # category_prob *= self._get_proba_multinom(feature, point, category)
-                    lol = self._get_proba_multinom(feature, point, category)
-                    category_prob *= lol
+                    category_prob *= self._get_proba_multinom(feature, point, category)
+
+                probabilities.append(category_prob)
+            result.append(np.unique(self.y)[np.argmax(probabilities)])
+        return result
+
+class NaiveBayesGaussian(NaiveBayes):
+    def _get_proba_gaussian(self, feature, point, category):
+        std = np.std(self.x[self.y == category])
+        u = np.mean(self.x[self.y == category])
+        prob = (1 / np.sqrt(2 * np.pi * std ** 2)
+                * np.exp(-(point[feature] - u) ** 2 / 2 * std ** 2))
+        return prob
+
+    def predict(self, x):
+        result = []
+        for point in x:
+            probabilities = []
+            for category in np.unique(self.y):
+                category_prob = 1
+                for feature in range(len(point)):
+                    category_prob *= self._get_proba_gaussian(feature, point, category)
 
                 probabilities.append(category_prob)
             result.append(np.unique(self.y)[np.argmax(probabilities)])
