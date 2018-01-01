@@ -15,3 +15,7 @@ I will keep it simple with minimum options and lines of code. I use MSE loss fun
 - k means
 - k nearest neighbors classifier
 - k nearest neighbors regression
+
+### Bayes classification:
+- for multinomial features
+- for continuous features (Gaussian distribution)
