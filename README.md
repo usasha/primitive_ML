@@ -19,3 +19,6 @@ I will keep it simple with minimum options and lines of code. I use MSE loss fun
 ### Bayes classification:
 - for multinomial features
 - for continuous features (Gaussian distribution)
+
+### Anomaly detection
+- isolation forest
