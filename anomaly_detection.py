@@ -48,11 +48,30 @@ class IsolationTree(object):
 
 
 class IsolationForest(object):
-    def __init__(self):
-        pass
+    def __init__(self, n_estimators=20, outliers_percent=0.01):
+        self.n_estimators = n_estimators
+        self.trees = []
+        self.outliers_percent = outliers_percent
 
     def fit(self, x, y):
-        pass
+        for i in range(self.n_estimators):
+            sub = np.random.randint(0, len(x), len(x))
 
-    def predict(self, x, y):
-        pass
+            new_tree = IsolationTree()
+            new_tree.fit(x[[sub]], y[[sub]])
+            self.trees.append(new_tree)
+
+    def predict(self, x):
+        outliers_n = int(len(x) * self.outliers_percent)
+        distance_means = []
+        for point in x:
+            point_distances = []
+            for tree in self.trees:
+                point_distances.append(np.array(tree.find_distance(point)))
+            distance_means.append(np.mean(point_distances))
+        furthest = np.argsort(distance_means)[::-1][:outliers_n]
+
+        result = np.zeros(len(x))
+        result[furthest] = 1
+
+        return result
