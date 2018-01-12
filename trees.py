@@ -84,6 +84,7 @@ class RandomForest(object):
             new_tree.fit(x[[sub]], y[[sub]])
             self.trees.append(new_tree)
 
+    # TODO check if it works with multiple Xs
     def predict(self, x):
         answers = []
         for tree in self.trees:
