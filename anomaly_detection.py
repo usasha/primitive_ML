@@ -8,13 +8,18 @@ class IsolationTree(object):
         self.root = TreeNode()
 
     def split(self, x, y, node):
-        if len(np.unique(y)) == 1:
+        if len(np.unique(y)) == 1 or x is None:
             return
+        if len(x) < 1:
+            pass
 
-        feature = np.random.randint(len(x.T))
-        feature_min = x[:, feature].min()
-        feature_max = x[:, feature].max()
-        threshold = np.random.uniform(feature_min, feature_max)
+        variance = 1
+        while variance < 2:
+            feature = np.random.randint(len(x.T))
+            variance = len(np.unique(x[:, feature]))
+        low_bound = x[:, feature].min() + 1e-10  # np.random.uniform interval is half open
+        high_bound = x[:, feature].max() - 1e-10
+        threshold = np.random.uniform(low_bound, high_bound)
 
         left = x[:, feature] < threshold
         right = ~left
@@ -30,7 +35,9 @@ class IsolationTree(object):
     def fit(self, x, y):
         self.split(x, y, self.root)
 
-    def find_distance(self, point, current_dist, node):
+    def find_distance(self, point, current_dist=0, node=None):
+        if node is None:
+            node = self.root
         if (node.left is None) and (node.right is None):
             return current_dist
 
