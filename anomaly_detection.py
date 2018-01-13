@@ -69,9 +69,9 @@ class IsolationForest(object):
             for tree in self.trees:
                 point_distances.append(np.array(tree.find_distance(point)))
             distance_means.append(np.mean(point_distances))
-        furthest = np.argsort(distance_means)[::-1][:outliers_n]
+        shortest = np.argsort(distance_means)[:outliers_n]
 
         result = np.zeros(len(x))
-        result[furthest] = 1
+        result[shortest] = 1
 
         return result
