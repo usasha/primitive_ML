@@ -20,5 +20,5 @@ I will keep it simple with minimum options and lines of code. I use MSE loss fun
 - for multinomial features
 - for continuous features (Gaussian distribution)
 
-### Anomaly detection
+### Anomaly detectionscscsaascas
 - isolation forest
